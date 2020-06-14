@@ -58,6 +58,7 @@ platform_do_upgrade() {
 	hc5962|\
 	r6220|\
 	netgear,r6350|\
+	beeline,turbo-plus|\
 	ubnt-erx|\
 	ubnt-erx-sfp|\
 	xiaomi,mir3g|\
