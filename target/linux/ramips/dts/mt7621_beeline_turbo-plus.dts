@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-2.0
 /dts-v1/;
 
 #include "mt7621.dtsi"
@@ -6,13 +5,10 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 
-
 / {
-	compatible = "beeline,smartbox-turbo-plus", "mediatek,mt7621-soc";
-        model = "Beeline SmartBox Turbo+";
-};
+	compatible = "beeline,turbo-plus","mediatek,mt7621-soc";
+        model = "Beeline Turbo Plus";
 
-/ {
 	aliases {
 		led-boot = &led_usb;
 		led-failsafe = &led_usb;
@@ -30,24 +26,25 @@
 
 		led_power: power {
 			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
+			label = "turbo-plus:green:power";
 		};
 
 		led_usb: usb {
 			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
 			trigger-sources = <&xhci_ehci_port1>, <&ehci_port2>;
 			linux,default-trigger = "usbport";
-			label = "smartbox-turbo-plus:red:usb";
+			label = "turbo-plus:red:usb";
 		};
 
 		led_internet: internet {
 			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
-			label = "smartbox-turbo-plus:green:wan";
+			label = "turbo-plus:green:internet";
 		};
 
 		led_wifi: wifi {
 			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy0tpt";
-			label = "smartbox-turbo-plus:blue:wifi";
+			label = "turbo-plus:blue:wifi";
 		};
 	};
 
@@ -77,6 +74,74 @@
 	};
 };
 
+&xhci {
+	vbus-supply = <&reg_usb_vbus>;
+};
+
+&pcie {
+	status = "okay";
+};
+
+&pcie0 {
+	wifi@0,0 {
+		compatible = "mediatek,mt76";
+		reg = <0x0 0 0 0 0>;
+		mediatek,mtd-eeprom = <&factory 0x8000>;
+		ieee80211-freq-limit = <5000000 6000000>;
+	};
+};
+
+&pcie1 {
+	wifi@0,0 {
+		compatible = "mediatek,mt76";
+		reg = <0x0 0 0 0 0>;
+		mediatek,mtd-eeprom = <&factory 0x0>;
+		ieee80211-freq-limit = <2400000 2500000>;
+	};
+};
+
+&gmac0 {
+	mtd-mac-address = <&factory 0x4>;
+};
+
+&switch0 {
+	ports {
+
+		port@0 {
+			status = "okay";
+			label = "wan";
+			mtd-mac-address = <&factory 0x4>;
+			mtd-mac-address-increment = <2>;
+		};
+
+		port@1 {
+			status = "okay";
+			label = "lan1";
+		};
+
+		port@2 {
+			status = "okay";
+			label = "lan2";
+		};
+
+		port@3 {
+			status = "okay";
+			label = "lan3";
+		};
+
+		port@4 {
+			status = "okay";
+			label = "lan4";
+		};
+	};
+};
+
+&state_default {
+	gpio {
+		groups = "uart3", "uart2", "jtag", "wdt";
+		function = "gpio";
+	};
+};
 
 &nand {
 	status = "okay";
@@ -127,74 +192,3 @@
 		};
 	};
 };
-
-&xhci {
-	vbus-supply = <&reg_usb_vbus>;
-};
-
-&pcie {
-	status = "okay";
-};
-
-&pcie0 {
-	wifi@0,0 {
-		compatible = "mediatek,mt76";
-		reg = <0x0 0 0 0 0>;
-		mediatek,mtd-eeprom = <&factory 0x8000>;
-		ieee80211-freq-limit = <5000000 6000000>;
-	};
-};
-
-&pcie1 {
-	wifi@0,0 {
-		compatible = "mediatek,mt76";
-		reg = <0x0 0 0 0 0>;
-		mediatek,mtd-eeprom = <&factory 0x0>;
-		ieee80211-freq-limit = <2400000 2500000>;
-	};
-};
-
-&gmac0 {
-	mtd-mac-address = <&factory 0x4>;
-};
-
-&state_default {
-	gpio {
-		ralink,group = "uart3", "uart2", "jtag", "wdt";
-		ralink,function = "gpio";
-	};
-};
-&switch0 {
-	ports {
-		port@0 {
-			status = "okay";
-			label = "wan";
-			mtd-mac-address = <&factory 0x4>;
-			mtd-mac-address-increment = <2>;
-		};
-
-		port@1 {
-			status = "okay";
-			label = "lan1";
-		};
-
-		port@2 {
-			status = "okay";
-			label = "lan2";
-		};
-
-		port@3 {
-			status = "okay";
-			label = "lan3";
-		};
-
-		port@4 {
-			status = "okay";
-			label = "lan4";
-		};
-	};
-};
-
-
-
-
