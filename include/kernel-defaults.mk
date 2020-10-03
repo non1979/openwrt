@@ -106,7 +106,7 @@ define Kernel/Configure/Default
 	}
 	$(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
 	#grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | mkhash md5 > $(LINUX_DIR)/.vermagic
-	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | echo 70f97ad5368ab3f3a02f0694a397f029 > $(LINUX_DIR)/.vermagic
+	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | echo d10f5bcb998e1babf42435a9b8db6350 > $(LINUX_DIR)/.vermagic
 endef
 
 define Kernel/Configure/Initramfs
